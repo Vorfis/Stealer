@@ -29,13 +29,11 @@ A tool for collecting system information, files, browser and Telegram data, plus
 Проверка на работу в виртуальной машине / Anti-VM detection
 Сбор истории браузеров (Chrome) / Browser history collection (Chrome)
 Сбор сохранённых паролей Wi-Fi / Wi-Fi passwords collection
-Кейлоггер (запись нажатий клавиш) / Keylogger
 Определение активного окна / Active window detection
 Логирование активности пользователя (мышь, клавиатура) / User activity logging
 Определение геолокации по IP / Geolocation via IP
 Маскировка под системный файл и установка атрибута HIDDEN / Masquerade as system file with hidden attribute
 Самокопирование в %APPDATA%\svchost.exe / Self-copy to %APPDATA%\svchost.exe
-Распространение через USB-накопители / USB propagation
 Кража данных игровых лаунчеров (Steam, Origin, Epic Games) / Game launchers data theft
 Распространение по локальной сети через net use / LAN propagation via net use
 ```
